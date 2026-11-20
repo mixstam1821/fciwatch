@@ -1,0 +1,46 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fciwatch"
+version = "0.1.0"
+description = "Independent, open check of MTG-FCI infrared calibration stability against Meteosat SEVIRI."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Michail Stamatis" }]
+keywords = ["satellite", "calibration", "EUMETSAT", "MTG", "FCI", "SEVIRI", "climate", "GSICS"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Atmospheric Science",
+]
+# The core (maths, drift, report) only needs numpy and pandas.
+dependencies = ["numpy>=1.24", "pandas>=2.0"]
+
+[project.optional-dependencies]
+# Download from the EUMETSAT Data Store.
+fetch = ["eumdac"]
+# Read the raw satellite files and put them on a common grid.
+read = ["satpy", "pyresample", "netCDF4", "h5netcdf"]
+dev = ["pytest", "ruff"]
+
+[project.scripts]
+fciwatch = "fciwatch.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/mixstam1821/fciwatch"
+Issues = "https://github.com/mixstam1821/fciwatch/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fciwatch"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
